@@ -1,0 +1,35 @@
+﻿@model IEnumerable<IUDApplication.Models.Product>
+<h1>Products</h1>
+<p>
+    <a asp-action="Insert">New Product</a>
+</p>
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <td>ProductName</td>
+            <td>CategoryId</td>
+            <td>CategoryName</td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProductName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CategoryId)
+                </td>
+                <td>
+                    @Html.ActionLink("Update", "Update", new { id = item.Id }) |
+                    @Html.ActionLink("Detail", "Detail", new { id = item.Id }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                </td>
+            </tr>
+         }
+    </tbody>
+</table>

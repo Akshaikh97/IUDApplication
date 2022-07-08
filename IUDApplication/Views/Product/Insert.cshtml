@@ -1,0 +1,18 @@
+﻿@model IUDApplication.ViewModel.CrudViewModel
+
+<h1>Create Customer</h1>
+
+@using (Html.BeginForm("Insert", "Product"))
+{
+    <div class="form-group">
+        @Html.LabelFor(x => x.Product.ProductName)
+        @Html.TextBoxFor(x => x.Product.ProductName, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(x => x.Product.CategoryId)
+        @Html.DropDownListFor(x => x.Product.CategoryId,
+        new SelectList(Model.Category, "Id", "CategoryName"), "Select Category Type", new { @class = "form-control" })
+    </div>
+    @Html.HiddenFor(x => x.Product.Id)
+    <button type="submit" class="btn btn-primary">Save</button>
+}
