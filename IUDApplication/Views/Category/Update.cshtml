@@ -1,0 +1,13 @@
+﻿@model IUDApplication.Models.Category
+
+<h1>Update Category</h1>
+
+@using (Html.BeginForm("Update", "Category"))
+{
+    <div class="form-group">
+        @Html.LabelFor(x => x.CategoryName)
+        @Html.TextBoxFor(x => x.CategoryName, new { @class = "form-control" })
+    </div>
+    @Html.HiddenFor(x => x.Id)
+    <button type="submit" class="btn btn-primary">Edit</button>
+}

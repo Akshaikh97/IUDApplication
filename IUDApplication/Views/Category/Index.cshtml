@@ -1,12 +1,12 @@
-﻿@model IEnumerable<IUDApplication.Models.Product>
-<h1>Products</h1>
+﻿@model IEnumerable<IUDApplication.Models.Category>
+
+<h1>Category</h1>
 <p>
-    <a asp-action="Insert">New Product</a>
+    <a asp-action="Insert">New Category</a>
 </p>
 <table class="table table-bordered table-hover">
     <thead>
         <tr>
-            <td>ProductName</td>
             <td>CategoryId</td>
             <td>CategoryName</td>
         </tr>
@@ -19,16 +19,13 @@
                     @Html.DisplayFor(modelItem => item.Id)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.ProductName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CategoryId)
+                    @Html.DisplayFor(modelItem => item.CategoryName)
                 </td>
                 <td>
                     @Html.ActionLink("Update", "Update", new { id = item.Id }) |
                     @Html.ActionLink("Delete", "Delete", new { id = item.Id })
                 </td>
             </tr>
-         }
+        }
     </tbody>
 </table>

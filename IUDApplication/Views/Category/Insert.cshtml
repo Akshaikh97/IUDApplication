@@ -1,0 +1,13 @@
+﻿@model IUDApplication.Models.Category
+
+<h1>Create Product</h1>
+
+@using (Html.BeginForm("Insert", "Category"))
+{
+    <div class="form-group">
+        @Html.LabelFor(x => x.CategoryName)
+        @Html.TextBoxFor(x => x.CategoryName, new { @class = "form-control" })
+    </div>
+    @Html.HiddenFor(x => x.Id)
+    <button type="submit" class="btn btn-primary">Save</button>
+}
