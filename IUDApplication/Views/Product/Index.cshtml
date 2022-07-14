@@ -1,60 +1,78 @@
-﻿@*@model IEnumerable<IUDApplication.Models.Product>*@
-@model IUDApplication.ViewModel.CrudViewModel
+﻿@model IEnumerable<IUDApplication.Models.Product>
 <h1>Products</h1>
-<p>
-    <a asp-action="Insert">New Product</a>
-</p>
-<form asp-action="Index" asp-controller="Product" method="post">
-    <table class="table table-bordered table-hover">
-        <thead>
-            <tr>
-                <td>ProductName</td>
-                <td>CategoryId</td>
-                <td>CategoryName</td>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.ProductList)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Id)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ProductName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.CategoryId)
-                    </td>
-                    <td>
-                        @Html.ActionLink("Update", "Update", new { id = item.Id }) |
-                        @Html.ActionLink("Delete", "Delete", new { id = item.Id })
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-    <ul class="pagination">
-        @for (int i = 1; i <= Model.PageCount; i++)@*"PageCount" I'll get from Model'*@
+
+<a asp-action="Insert">New Product</a>
+@*<form class="form-inline" asp-action="/Product/index">
+    <label for="Search">Search</label>
+    <input type="search" class="form-control" id="search" name="search" placeholder="Search by Product Name" value="@ViewBag.search" />
+    <button type="submit" class="btn btn-primary">Go</button>
+</form>*@
+
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <td>ProductId</td>
+            <td>ProductName</td>
+            <td>CategoryId</td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
         {
-            @*"page-item" design number will be applied based on bootstrap*@
-            <li class="page-item">
-                @if (i != Model.CurrentPageIndex)
-                {
-                    <a class="page-link" href="javascript:PagerClick(@i)">@i</a>@*here I'm passing value through "javascript:PagerClick" which I'll get in my loop.'*@
-                }
-                else
-                {
-                    <a class="page-link">@i</a>
-                }
-            </li>
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProductName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CategoryId)
+                </td>
+                <td>
+                    @Html.ActionLink("Update", "Update", new { id = item.Id }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                </td>
+            </tr>
         }
-    </ul>
-    <input type="hidden" id="hfCurrentPageIndex" name="CurrentPageIndex" />
-</form>
-<script type="text/javascript">
-    function PageClick(index) {
-        document.getElementById("hfCurrentPageIndex").nodeValue = index;
-        document.forms[0].submit();//2)Here I need to submit the form with the value, which I'll get from "Hidden" field.
-    }
-</script>
+        <tr>
+            <td colspan="9">
+                @{
+                    int PrevPageNo = ViewBag.PageNo - 1;
+                    if (PrevPageNo <= 0)
+                    {
+                        PrevPageNo = 1;
+                    }
+                    int NextPageNo = ViewBag.PageNo + 1;
+                    if (NextPageNo > ViewBag.NoOfPages)
+                    {
+                        NextPageNo = ViewBag.NoOfPages;
+                    }
+                }
+                <ul class="pagination justify-content-center">
+                    <li class="page-item">
+                        <a class="page-link" href="/Product/index?PageNo=@PrevPageNo">Prev</a>
+                    </li>
+                    @for (int i = 0; i < ViewBag.NoOfPages; i++)
+                    {
+                        if ((i + 1) == ViewBag.PageNo)
+                        {
+                            <li class="page-item active">
+                                <a class="page-link" href="/Product/index?PageNo=@(i+1)">@(i+1)</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="page-item">
+                                <a class="page-link" href="/Product/index?PageNo=@(i+1)">@(i+1)</a>
+                            </li>
+                        }
+                    }
+                    <li class="page-item">
+                        <a class="page-link" href="/Product/index?PageNo=@NextPageNo">Next</a>
+                    </li>
+                </ul>
+            </td>
+        </tr>
+    </tbody>
+</table>
