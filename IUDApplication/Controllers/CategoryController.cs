@@ -42,14 +42,22 @@ namespace IUDApplication.Controllers
         {
             Category category = _db.Category.SingleOrDefault(x => x.Id == _category.Id);
             category.CategoryName = _category.CategoryName;
+            _db.SaveChanges();
             return RedirectToAction("Index");
         }
         public IActionResult Delete(int Id)
         {
-            Category category = _db.Category.SingleOrDefault(x => x.Id == Id);
-            _db.Category.Remove(category);
+            Category exsistingCategory = _db.Category.SingleOrDefault(x => x.Id == Id);
+           
+            return View(exsistingCategory);
+        }
+        [HttpPost]
+        public IActionResult Delete(Category category,int Id)
+        {
+           Category exsistingCategory = _db.Category.SingleOrDefault(x => x.Id == Id);
+            _db.Category.Remove(exsistingCategory);
             _db.SaveChanges();
-            return View();
+            return RedirectToAction("Index","Category");
         }
     }
 }

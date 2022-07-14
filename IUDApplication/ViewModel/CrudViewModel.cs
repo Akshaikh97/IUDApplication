@@ -10,5 +10,9 @@ namespace IUDApplication.ViewModel
     {
         public IEnumerable<Category> Category { get; set; }
         public Product Product { get; set; }
+
+        public List<Product> ProductList { get; set; }
+        public int CurrentPageIndex { get; set; }
+        public int PageCount { get; set; }
     }
 }

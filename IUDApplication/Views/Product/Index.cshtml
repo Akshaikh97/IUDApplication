@@ -1,34 +1,60 @@
-﻿@model IEnumerable<IUDApplication.Models.Product>
+﻿@*@model IEnumerable<IUDApplication.Models.Product>*@
+@model IUDApplication.ViewModel.CrudViewModel
 <h1>Products</h1>
 <p>
     <a asp-action="Insert">New Product</a>
 </p>
-<table class="table table-bordered table-hover">
-    <thead>
-        <tr>
-            <td>ProductName</td>
-            <td>CategoryId</td>
-            <td>CategoryName</td>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+<form asp-action="Index" asp-controller="Product" method="post">
+    <table class="table table-bordered table-hover">
+        <thead>
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Id)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ProductName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CategoryId)
-                </td>
-                <td>
-                    @Html.ActionLink("Update", "Update", new { id = item.Id }) |
-                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
-                </td>
+                <td>ProductName</td>
+                <td>CategoryId</td>
+                <td>CategoryName</td>
             </tr>
-         }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.ProductList)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Id)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ProductName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CategoryId)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Update", "Update", new { id = item.Id }) |
+                        @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <ul class="pagination">
+        @for (int i = 1; i <= Model.PageCount; i++)@*"PageCount" I'll get from Model'*@
+        {
+            @*"page-item" design number will be applied based on bootstrap*@
+            <li class="page-item">
+                @if (i != Model.CurrentPageIndex)
+                {
+                    <a class="page-link" href="javascript:PagerClick(@i)">@i</a>@*here I'm passing value through "javascript:PagerClick" which I'll get in my loop.'*@
+                }
+                else
+                {
+                    <a class="page-link">@i</a>
+                }
+            </li>
+        }
+    </ul>
+    <input type="hidden" id="hfCurrentPageIndex" name="CurrentPageIndex" />
+</form>
+<script type="text/javascript">
+    function PageClick(index) {
+        document.getElementById("hfCurrentPageIndex").nodeValue = index;
+        document.forms[0].submit();//2)Here I need to submit the form with the value, which I'll get from "Hidden" field.
+    }
+</script>
