@@ -13,7 +13,7 @@
         <tr>
             <td>ProductId</td>
             <td>ProductName</td>
-            <td>CategoryId</td>
+            <td>CategoryName</td>
         </tr>
     </thead>
     <tbody>
@@ -27,7 +27,7 @@
                     @Html.DisplayFor(modelItem => item.ProductName)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.CategoryId)
+                    @Html.DisplayFor(modelItem => item.Category.ActiveOrNot)
                 </td>
                 <td>
                     @Html.ActionLink("Update", "Update", new { id = item.Id }) |

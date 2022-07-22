@@ -1,6 +1,7 @@
 ﻿using IUDApplication.Models;
 using IUDApplication.ViewModel;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,10 +16,11 @@ namespace IUDApplication.Controllers
         {
             _db = db;
         }
-        public IActionResult Index(int PageNo = 1)
+        public IActionResult Index(int PageNo = 1, bool a=true)
         {
-            List<Product> product = _db.Product.ToList();
-            
+            List<Product> product = _db.Product.Include(x => x.Category)
+                                               .Where(c => c.Category.ActiveOrNot
+                                               .Equals(a)).ToList();
             int NoOfRecordsPerPage = 3;
             int NoOfPages = Convert.ToInt32(Math.Ceiling(Convert.ToDouble(product.Count) / Convert.ToDouble(NoOfRecordsPerPage)));
             int NoOfRecordsToSkip = (PageNo - 1) * NoOfRecordsPerPage;

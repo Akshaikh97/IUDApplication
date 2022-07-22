@@ -5,7 +5,7 @@
 @using (Html.BeginForm("Update", "Category"))
 {
 <div class="form-group">
-    @Html.HiddenFor(x => x.Id)
+    @Html.HiddenFor(x => x.CategoryId)
     @Html.LabelFor(x => x.CategoryName)
     @Html.TextBoxFor(x => x.CategoryName, new { @class = "form-control" })
 </div>

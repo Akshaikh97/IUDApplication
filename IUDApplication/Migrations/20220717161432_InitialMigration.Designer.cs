@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IUDApplication.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20220714051635_Initial Migration")]
+    [Migration("20220717161432_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -22,15 +22,18 @@ namespace IUDApplication.Migrations
 
             modelBuilder.Entity("IUDApplication.Models.Category", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("CategoryId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<bool>("ActiveOrNot")
+                        .HasColumnType("bit");
+
                     b.Property<string>("CategoryName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("CategoryId");
 
                     b.ToTable("Category");
                 });
@@ -57,16 +60,13 @@ namespace IUDApplication.Migrations
 
             modelBuilder.Entity("IUDApplication.Models.Product", b =>
                 {
-                    b.HasOne("IUDApplication.Models.Category", null)
-                        .WithMany("Product")
+                    b.HasOne("IUDApplication.Models.Category", "Category")
+                        .WithMany()
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
 
-            modelBuilder.Entity("IUDApplication.Models.Category", b =>
-                {
-                    b.Navigation("Product");
+                    b.Navigation("Category");
                 });
 #pragma warning restore 612, 618
         }

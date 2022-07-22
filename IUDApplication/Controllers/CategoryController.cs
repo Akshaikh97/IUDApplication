@@ -34,30 +34,48 @@ namespace IUDApplication.Controllers
         [HttpGet]
         public IActionResult Update(int Id)
         {
-            Category category = _db.Category.SingleOrDefault(x => x.Id == Id);
+            Category category = _db.Category.SingleOrDefault(x => x.CategoryId == Id);
             return View(category);
         }
         [HttpPost]
         public IActionResult Update(Category _category)
         {
-            Category category = _db.Category.SingleOrDefault(x => x.Id == _category.Id);
+            Category category = _db.Category.SingleOrDefault(x => x.CategoryId == _category.CategoryId);
             category.CategoryName = _category.CategoryName;
             _db.SaveChanges();
             return RedirectToAction("Index");
         }
         public IActionResult Delete(int Id)
         {
-            Category exsistingCategory = _db.Category.SingleOrDefault(x => x.Id == Id);
+            Category exsistingCategory = _db.Category.SingleOrDefault(x => x.CategoryId == Id);
            
             return View(exsistingCategory);
         }
         [HttpPost]
         public IActionResult Delete(Category category,int Id)
         {
-           Category exsistingCategory = _db.Category.SingleOrDefault(x => x.Id == Id);
+           Category exsistingCategory = _db.Category.SingleOrDefault(x => x.CategoryId == Id);
             _db.Category.Remove(exsistingCategory);
             _db.SaveChanges();
             return RedirectToAction("Index","Category");
+        }
+
+        public IActionResult Active(Category _category)
+        {
+            //Category category = _db.Category.Where(x => x.Id == Id).FirstOrDefault();
+            //Product product = _db.Product.Where(x => x.Id == category.Id).FirstOrDefault();
+            Category category = _db.Category.SingleOrDefault(x => x.CategoryId == _category.CategoryId);
+            category.ActiveOrNot = true;
+            _db.SaveChanges();
+            return RedirectToAction("Index", "Product");
+        }
+
+        public IActionResult Deactive(Category _category)
+        {
+            Category category = _db.Category.SingleOrDefault(x => x.CategoryId == _category.CategoryId);
+            category.ActiveOrNot = false;
+            _db.SaveChanges();
+            return RedirectToAction("Index", "Product");
         }
     }
 }

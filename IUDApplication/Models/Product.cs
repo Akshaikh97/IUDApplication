@@ -12,8 +12,9 @@ namespace IUDApplication.Models
         [Key]
         public int Id { get; set; }
         public string ProductName { get; set; }
+        public virtual int CategoryId { get; set; }
         [ForeignKey("CategoryId")]
-        public int CategoryId { get; set; }
+        public virtual Category Category { get; set; }
 
     }
 }

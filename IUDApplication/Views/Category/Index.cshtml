@@ -9,6 +9,7 @@
         <tr>
             <td>CategoryId</td>
             <td>CategoryName</td>
+            <th>Status</th>
         </tr>
     </thead>
     <tbody>
@@ -16,14 +17,25 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Id)
+                    @Html.DisplayFor(modelItem => item.CategoryId)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.CategoryName)
                 </td>
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.ActiveOrNot)
+                    </td>*@
                 <td>
-                    @Html.ActionLink("Update", "Update", new { id = item.Id }) |
-                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                    @if (item.ActiveOrNot == false)
+                    {
+                        @Html.ActionLink("Activate", "Active", new { CategoryId = item.CategoryId }, new { @class = "btn btn-success" })
+                    }
+                    else
+                    {
+                        @Html.ActionLink("Deactivate", "Deactive", new { CategoryId = item.CategoryId }, new { @class = "btn btn-warning" })
+                    }
+                    @Html.ActionLink("Update", "Update", new { id = item.CategoryId }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.CategoryId })
                 </td>
             </tr>
         }
