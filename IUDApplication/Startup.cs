@@ -1,7 +1,11 @@
+using IUDApplication.Helpers;
 using IUDApplication.Models;
+using IUDApplication.Repository;
+using IUDApplication.Service;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -25,9 +29,23 @@ namespace IUDApplication
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews();
             services.AddDbContext<Context>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("CrudDb")));
+
+            services.AddIdentity<ApplicationUser, IdentityRole>()
+                .AddEntityFrameworkStores<Context>();
+            
+            services.ConfigureApplicationCookie(config =>
+            {
+                config.LoginPath = Configuration["Application:LoginPath"];
+            });
+
+            services.AddControllersWithViews();
+
+            services.AddScoped<IUserClaimsPrincipalFactory
+                <ApplicationUser>, ApplicationUserClaimsPrincipalFactory>();
+            services.AddScoped<IAccountRepository, AccountRepository>();
+            services.AddScoped<IUserService, UserService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -48,6 +66,8 @@ namespace IUDApplication
 
             app.UseRouting();
 
+            //Enabled Authentication, Authorization
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

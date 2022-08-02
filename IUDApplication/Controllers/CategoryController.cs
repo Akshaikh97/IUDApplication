@@ -9,7 +9,7 @@ namespace IUDApplication.Controllers
 {
     public class CategoryController : Controller
     {
-        private Context _db;
+        private readonly Context _db;
         public CategoryController(Context db)
         {
             _db = db;
@@ -62,8 +62,6 @@ namespace IUDApplication.Controllers
 
         public IActionResult Active(Category _category)
         {
-            //Category category = _db.Category.Where(x => x.Id == Id).FirstOrDefault();
-            //Product product = _db.Product.Where(x => x.Id == category.Id).FirstOrDefault();
             Category category = _db.Category.SingleOrDefault(x => x.CategoryId == _category.CategoryId);
             category.ActiveOrNot = true;
             _db.SaveChanges();

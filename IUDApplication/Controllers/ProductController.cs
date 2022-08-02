@@ -1,5 +1,6 @@
 ﻿using IUDApplication.Models;
 using IUDApplication.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -11,7 +12,7 @@ namespace IUDApplication.Controllers
 {
     public class ProductController : Controller
     {
-        private Context _db;
+        private readonly Context _db;
         public ProductController(Context db)
         {
             _db = db;
@@ -21,6 +22,7 @@ namespace IUDApplication.Controllers
             List<Product> product = _db.Product.Include(x => x.Category)
                                                .Where(c => c.Category.ActiveOrNot
                                                .Equals(a)).ToList();
+            var p=_db.Product.Where(x =>x.Category.ActiveOrNot==a).Select(x=>x.Category).ToList();
             int NoOfRecordsPerPage = 3;
             int NoOfPages = Convert.ToInt32(Math.Ceiling(Convert.ToDouble(product.Count) / Convert.ToDouble(NoOfRecordsPerPage)));
             int NoOfRecordsToSkip = (PageNo - 1) * NoOfRecordsPerPage;
@@ -29,6 +31,7 @@ namespace IUDApplication.Controllers
             product = product.Skip(NoOfRecordsToSkip).Take(NoOfRecordsPerPage).ToList();
             return View(product);
         }
+        [Authorize]
         [HttpGet]
         public IActionResult Insert()
         {
@@ -78,27 +81,5 @@ namespace IUDApplication.Controllers
             _db.SaveChanges();
             return View();
         }
-
-        //private CrudViewModel GetProductList(int CurrentPage)
-        //{
-        //    int MaxRowsPerPage = 5;
-        //    CrudViewModel viewModels = new CrudViewModel();
-        //    viewModels.ProductList = (from Product in _db.Product select Product)//Fetching
-        //        .OrderBy(x => x.Id)//OrderBy-"Id"
-        //                           //Ex- if "currentPage" is 5
-        //                           //it will skip first 5 records
-        //                           //and it will fetch extra 5 recrds based on the page count and the range.
-        //                           //ex if I'm passing 5, then it will only fatch 5 records.
-        //        .Skip((CurrentPage - 1) * MaxRowsPerPage)
-        //        .Take(MaxRowsPerPage).ToList();
-        //    //Taking the total count of "Product" list from the table.
-        //    //Then I'm deviding by "MaxRowsPerPage".
-        //    //Product.Count/MaxRowsPerPage.
-        //    double PageCount = (double)((decimal)_db.Product.Count() / Convert.ToDecimal(MaxRowsPerPage));
-        //    //I'm pasing "PageCount" value of 'Product' to "viewModels.PageCount".
-        //    viewModels.PageCount = (int)Math.Ceiling(PageCount);
-        //    viewModels.CurrentPageIndex = CurrentPage;
-        //    return viewModels;
-        //}
     }
 }

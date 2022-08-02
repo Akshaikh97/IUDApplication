@@ -27,7 +27,7 @@
                     @Html.DisplayFor(modelItem => item.ProductName)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Category.ActiveOrNot)
+                    @Html.DisplayFor(modelItem => item.Category.CategoryName)
                 </td>
                 <td>
                     @Html.ActionLink("Update", "Update", new { id = item.Id }) |

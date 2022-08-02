@@ -1,4 +1,5 @@
 ﻿using IUDApplication.Models;
+using IUDApplication.Service;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -11,15 +12,19 @@ namespace IUDApplication.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        
+        //private readonly ILogger<HomeController> _logger;
+        private readonly IUserService _userService;
+        public HomeController(IUserService userService)
         {
-            _logger = logger;
+            //_logger = logger;
+            _userService = userService;
         }
 
         public IActionResult Index()
         {
+            var userId = _userService.GetUserId();
+            var isLoggedIn = _userService.IsAuthenticated();
             return View();
         }
 
