@@ -33,7 +33,12 @@ namespace IUDApplication
             options.UseSqlServer(Configuration.GetConnectionString("CrudDb")));
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<Context>();
+                .AddEntityFrameworkStores<Context>().AddDefaultTokenProviders();
+
+            services.Configure<IdentityOptions>(options => 
+            {
+                options.SignIn.RequireConfirmedEmail = true;
+            });
             
             services.ConfigureApplicationCookie(config =>
             {
@@ -46,6 +51,7 @@ namespace IUDApplication
                 <ApplicationUser>, ApplicationUserClaimsPrincipalFactory>();
             services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IEmailService, EmailService>();
 
             services.Configure<SMTPConfigModel>(Configuration.GetSection("SMTPConfig"));
         }

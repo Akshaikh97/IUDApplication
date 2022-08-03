@@ -12,19 +12,32 @@ namespace IUDApplication.Controllers
 {
     public class HomeController : Controller
     {
-        
+
         //private readonly ILogger<HomeController> _logger;
         private readonly IUserService _userService;
-        public HomeController(IUserService userService)
+        private readonly IEmailService _emailService;
+
+        public HomeController(IUserService userService, IEmailService emailService)
         {
             //_logger = logger;
             _userService = userService;
+            _emailService = emailService;
         }
 
         public IActionResult Index()
         {
-            var userId = _userService.GetUserId();
-            var isLoggedIn = _userService.IsAuthenticated();
+            //UserEmailOptions options = new UserEmailOptions
+            //{
+            //    ToEmails = new List<string>() { "test@gmail.com" },
+            //    PlaceHolders= new List<KeyValuePair<string, string>>()
+            //    {
+            //        new KeyValuePair<string, string>("{{UserName}}", "Kasim")
+            //    }
+            //};
+            //await _emailService.SendTestEmail(options);
+
+            //var userId = _userService.GetUserId();
+            //var isLoggedIn = _userService.IsAuthenticated();
             return View();
         }
 
