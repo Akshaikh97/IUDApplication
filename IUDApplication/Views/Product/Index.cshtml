@@ -2,6 +2,9 @@
 <h1>Products</h1>
 
 <a asp-action="Insert">New Product</a>
+<div>
+    @Html.ActionLink("Export to Excel", "ExportContentToExcel")
+</div>
 @*<form class="form-inline" asp-action="/Product/index">
     <label for="Search">Search</label>
     <input type="search" class="form-control" id="search" name="search" placeholder="Search by Product Name" value="@ViewBag.search" />

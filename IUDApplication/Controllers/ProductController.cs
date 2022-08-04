@@ -3,8 +3,13 @@ using IUDApplication.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using OfficeOpenXml;
+using ClosedXML.Excel;
+//using Microsoft.Office.Interop.Excel;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -17,12 +22,12 @@ namespace IUDApplication.Controllers
         {
             _db = db;
         }
-        public IActionResult Index(int PageNo = 1, bool a=true)
+        public IActionResult Index(int PageNo = 1, bool a = true)
         {
             List<Product> product = _db.Product.Include(x => x.Category)
                                                .Where(c => c.Category.ActiveOrNot
                                                .Equals(a)).ToList();
-            var p=_db.Product.Where(x =>x.Category.ActiveOrNot==a).Select(x=>x.Category).ToList();
+            var p = _db.Product.Where(x => x.Category.ActiveOrNot == a).Select(x => x.Category).ToList();
             int NoOfRecordsPerPage = 3;
             int NoOfPages = Convert.ToInt32(Math.Ceiling(Convert.ToDouble(product.Count) / Convert.ToDouble(NoOfRecordsPerPage)));
             int NoOfRecordsToSkip = (PageNo - 1) * NoOfRecordsPerPage;
@@ -81,5 +86,40 @@ namespace IUDApplication.Controllers
             _db.SaveChanges();
             return View();
         }
+        public IActionResult ExportContentToExcel()
+        {
+
+            var products = _db.Product.Include(x => x.Category);
+
+            using (var workbook = new XLWorkbook())
+            {
+                var worksheet = workbook.Worksheets.Add("Products");
+                var currentRow = 1;
+                worksheet.Cell(currentRow, 1).Value = "Id";
+                worksheet.Cell(currentRow, 2).Value = "ProductName";
+                worksheet.Cell(currentRow, 3).Value = "Category";
+                foreach (var product in products)
+                {
+                    currentRow++;
+                    worksheet.Cell(currentRow, 1).Value = product.Id;
+                    worksheet.Cell(currentRow, 2).Value = product.ProductName;
+                    worksheet.Cell(currentRow, 3).Value = product.Category.CategoryName;
+                }
+                using (var stream = new MemoryStream())
+                {
+                    workbook.SaveAs(stream);
+                    var content = stream.ToArray();
+
+                    return File(
+                        content,
+                        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                        "Products.xlsx");
+                }
+            }
+        }
+
+
+
+
     }
 }
